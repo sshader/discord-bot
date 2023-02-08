@@ -1,46 +1,65 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useMutation, useQuery } from '../convex/_generated/react'
 
 export default function App() {
-  const messages = useQuery('listMessages') || []
+  const botResponses = useQuery('botResponses:listBotResponses') || []
 
-  const [newMessageText, setNewMessageText] = useState('')
-  const sendMessage = useMutation('sendMessage')
+  const [newPromptText, setNewPromptText] = useState('')
+  const [newResponseText, setNewResponseText] = useState('')
+  const addBotResponse = useMutation('botResponses:addBotResponse')
+  const deleteBotResponse = useMutation('botResponses:deleteBotResponse')
 
-  const [name, setName] = useState('user')
-
-  useEffect(() => {
-    setName('User ' + Math.floor(Math.random() * 10000))
-  }, [])
-
-  async function handleSendMessage(event: FormEvent) {
+  async function handleAddPrompt(event: any) {
     event.preventDefault()
-    setNewMessageText('')
-    await sendMessage(newMessageText, name)
+    setNewPromptText('')
+    setNewResponseText('')
+    await addBotResponse(newPromptText, newResponseText)
   }
   return (
     <main>
-      <h1>Convex Chat</h1>
-      <p className="badge">
-        <span>{name}</span>
-      </p>
-      <ul>
-        {messages.map((message) => (
-          <li key={message._id.toString()}>
-            <span>{message.author}:</span>
-            <span>{message.body}</span>
-            <span>{new Date(message._creationTime).toLocaleTimeString()}</span>
-          </li>
-        ))}
-      </ul>
-      <form onSubmit={handleSendMessage}>
-        <input
-          value={newMessageText}
-          onChange={(event) => setNewMessageText(event.target.value)}
-          placeholder="Write a message…"
-        />
-        <input type="submit" value="Send" disabled={!newMessageText} />
-      </form>
+      <table style={{ width: 600, textAlign: 'left' }}>
+        <thead>
+          <tr>
+            <th>When someone says...</th>
+            <th>Discord bot responds with...</th>
+          </tr>
+        </thead>
+        <tbody>
+          {botResponses.map((botResponse) => (
+            <tr key={botResponse._id.toString()}>
+              <td>{botResponse.prompt}</td>
+              <td>{botResponse.response}</td>
+              <td onClick={() => deleteBotResponse(botResponse._id)}>X</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>
+              <input
+                value={newPromptText}
+                onChange={(event) => setNewPromptText(event.target.value)}
+                placeholder="New prompt…"
+              />
+            </td>
+            <td>
+              <input
+                value={newResponseText}
+                onChange={(event) => setNewResponseText(event.target.value)}
+                placeholder="New response…"
+              />
+            </td>
+            <td>
+              <button
+                disabled={!newPromptText || !newResponseText}
+                onClick={handleAddPrompt}
+              >
+                Add prompt
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </main>
   )
 }
