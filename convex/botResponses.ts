@@ -1,5 +1,5 @@
 import { mutation, query } from './_generated/server'
-export const getBotResponse = query(async ({ db }, prompt) => {
+export const get = query(async ({ db }, prompt) => {
   const responseOrNull = await db
     .query('bot_responses')
     .filter((q) => q.eq(q.field('prompt'), prompt))
@@ -9,11 +9,11 @@ export const getBotResponse = query(async ({ db }, prompt) => {
   )
 })
 
-export const listBotResponses = query(async ({ db }) => {
+export const list = query(async ({ db }) => {
   return db.query('bot_responses').collect()
 })
 
-export const addBotResponse = mutation(async ({ db }, prompt, response) => {
+export const add = mutation(async ({ db }, prompt, response) => {
   const responseOrNull = await db
     .query('bot_responses')
     .filter((q) => q.eq(q.field('prompt'), prompt))
@@ -26,6 +26,6 @@ export const addBotResponse = mutation(async ({ db }, prompt, response) => {
   return null
 })
 
-export const deleteBotResponse = mutation(async ({ db }, id) => {
+export const remove = mutation(async ({ db }, id) => {
   await db.delete(id)
 })

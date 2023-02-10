@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { useMutation, useQuery } from '../convex/_generated/react'
 
 export default function App() {
-  const botResponses = useQuery('botResponses:listBotResponses') || []
+  const botResponses = useQuery('botResponses:list') || []
 
   const [newPromptText, setNewPromptText] = useState('')
   const [newResponseText, setNewResponseText] = useState('')
-  const addBotResponse = useMutation('botResponses:addBotResponse')
-  const deleteBotResponse = useMutation('botResponses:deleteBotResponse')
+  const addBotResponse = useMutation('botResponses:add')
+  const deleteBotResponse = useMutation('botResponses:remove')
 
   async function handleAddPrompt(event: any) {
     event.preventDefault()
