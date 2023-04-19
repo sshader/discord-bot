@@ -13,7 +13,7 @@ export default function App() {
     event.preventDefault()
     setNewPromptText('')
     setNewResponseText('')
-    await addBotResponse(newPromptText, newResponseText)
+    await addBotResponse({ prompt: newPromptText, response: newResponseText })
   }
   return (
     <main>
@@ -29,7 +29,7 @@ export default function App() {
             <tr key={botResponse._id.toString()}>
               <td>{botResponse.prompt}</td>
               <td>{botResponse.response}</td>
-              <td onClick={() => deleteBotResponse(botResponse._id)}>X</td>
+              <td onClick={() => deleteBotResponse({ id: botResponse._id })}>X</td>
             </tr>
           ))}
         </tbody>

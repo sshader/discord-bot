@@ -4,14 +4,14 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions'
-import { httpEndpoint } from './_generated/server'
+import { httpAction } from './_generated/server'
 
 const http = httpRouter()
 
 http.route({
   path: '/discord',
   method: 'POST',
-  handler: httpEndpoint(async ({ runQuery }, request: Request) => {
+  handler: httpAction(async ({ runQuery }, request: Request) => {
     const bodyText = await request.text()
 
     // Check signature -- uses discord-interactions package
@@ -38,7 +38,7 @@ http.route({
       const data = body.data
       if (data.name === 'ask_convex') {
         const prompt = data.options[0].value
-        const botResponse = await runQuery('botResponses:get', prompt)
+        const botResponse = await runQuery('botResponses:get', { prompt })
         return new Response(
           JSON.stringify({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

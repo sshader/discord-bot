@@ -1,5 +1,6 @@
+import { Id } from './_generated/dataModel'
 import { mutation, query } from './_generated/server'
-export const get = query(async ({ db }, prompt) => {
+export const get = query(async ({ db }, { prompt }: { prompt: string}) => {
   const responseOrNull = await db
     .query('bot_responses')
     .filter((q) => q.eq(q.field('prompt'), prompt))
@@ -13,7 +14,7 @@ export const list = query(async ({ db }) => {
   return db.query('bot_responses').collect()
 })
 
-export const add = mutation(async ({ db }, prompt, response) => {
+export const add = mutation(async ({ db }, { prompt, response}: {prompt: string, response: string }) => {
   const responseOrNull = await db
     .query('bot_responses')
     .filter((q) => q.eq(q.field('prompt'), prompt))
@@ -26,6 +27,6 @@ export const add = mutation(async ({ db }, prompt, response) => {
   return null
 })
 
-export const remove = mutation(async ({ db }, id) => {
+export const remove = mutation(async ({ db }, { id }: { id: Id<any> }) => {
   await db.delete(id)
 })

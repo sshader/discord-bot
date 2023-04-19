@@ -1,8 +1,9 @@
-import { defineSchema, defineTable, s } from 'convex/schema'
+import { defineSchema, defineTable } from 'convex/schema'
+import { v } from "convex/values"
 
 export default defineSchema({
   bot_responses: defineTable({
-    prompt: s.string(),
-    response: s.string(),
+    prompt: v.string(),
+    response: v.string(),
   }),
 })

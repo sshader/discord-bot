@@ -10,7 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "convex": "0.9.0",
+    "convex": "^0.13.0",
     "discord-interactions": "^3.3.0",
     "next": "latest",
     "react": "^18.2.0",
